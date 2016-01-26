@@ -239,13 +239,7 @@ SendHTTPRequest(thread_context_t ctx, int sockid, struct wget_vars *wv)
 	wv->recv = 0;
 	wv->header_len = wv->file_len = 0;
 
-	snprintf(request, HTTP_HEADER_LEN, "GET %s HTTP/1.0\r\n"
-			"User-Agent: Wget/1.12 (linux-gnu)\r\n"
-			"Accept: */*\r\n"
-			"Host: \r\n"
-//			"Connection: Keep-Alive\r\n\r\n", 
-			"Connection: Close\r\n\r\n", 
-			 host);
+	snprintf(request, HTTP_HEADER_LEN, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 	len = strlen(request);
 
 	wr = mtcp_write(ctx->mctx, sockid, request, len);
@@ -329,74 +323,7 @@ HandleReadEvent(thread_context_t ctx, int sockid, struct wget_vars *wv)
 		rd = mtcp_read(mctx, sockid, buf, BUF_SIZE);
 		if (rd <= 0)
 			break;
-		ctx->stat.reads += rd;
-
-		TRACE_APP("Socket %d: mtcp_read ret: %d, total_recv: %lu, "
-				"header_set: %d, header_len: %u, file_len: %lu\n", 
-				sockid, rd, wv->recv + rd, 
-				wv->headerset, wv->header_len, wv->file_len);
-
-		pbuf = buf;
-		if (!wv->headerset) {
-			copy_len = MIN(rd, HTTP_HEADER_LEN - wv->resp_len);
-			memcpy(wv->response + wv->resp_len, buf, copy_len);
-			wv->resp_len += copy_len;
-			wv->header_len = find_http_header(wv->response, wv->resp_len);
-			if (wv->header_len > 0) {
-				wv->response[wv->header_len] = '\0';
-				wv->file_len = http_header_long_val(wv->response, 
-						CONTENT_LENGTH_HDR, sizeof(CONTENT_LENGTH_HDR) - 1);
-				TRACE_APP("Socket %d Parsed response header. "
-						"Header length: %u, File length: %lu (%luMB)\n", 
-						sockid, wv->header_len, 
-						wv->file_len, wv->file_len / 1024 / 1024);
-				wv->headerset = TRUE;
-				wv->recv += (rd - (wv->resp_len - wv->header_len));
-				rd = (wv->resp_len - wv->header_len);
-				
-				pbuf += (rd - (wv->resp_len - wv->header_len));
-				//printf("Successfully parse header.\n");
-				//fflush(stdout);
-
-			} else {
-				/* failed to parse response header */
-#if 0
-				printf("[CPU %d] Socket %d Failed to parse response header."
-						" Data: \n%s\n", ctx->core, sockid, wv->response);
-				fflush(stdout);
-#endif
-				wv->recv += rd;
-				rd = 0;
-				ctx->stat.errors++;
-				ctx->errors++;
-				CloseConnection(ctx, sockid);
-				return 0;
-			}
-			//pbuf += wv->header_len;
-			//wv->recv += wv->header_len;
-			//rd -= wv->header_len;
-		}
-		wv->recv += rd;
-		
-		if (fio && wv->fd > 0) {
-			int wr = 0;
-			while (wr < rd) {
-				int _wr = write(wv->fd, pbuf + wr, rd - wr);
-				assert (_wr == rd - wr);
-				 if (_wr < 0) {
-					 perror("write");
-					 TRACE_ERROR("Failed to write.\n");
-					 assert(0);
-					 break;
-				 }
-				 wr += _wr;	
-				 wv->write += _wr;
-			}
-		}
-		
-		if (wv->header_len && (wv->recv >= wv->header_len + wv->file_len)) {
-			break;
-		}
+		SendHTTPRequest(ctx,sockid,wv);
 	}
 
 	if (rd > 0) {
