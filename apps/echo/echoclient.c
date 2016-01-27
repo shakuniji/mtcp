@@ -216,8 +216,8 @@ CloseConnection(thread_context_t ctx, int sockid)
 {
 	mtcp_epoll_ctl(ctx->mctx, ctx->ep, MTCP_EPOLL_CTL_DEL, sockid, NULL);
 	mtcp_close(ctx->mctx, sockid);
-	ctx->pending--;
-	ctx->done++;
+	//ctx->pending--;
+	//ctx->done++;
 	assert(ctx->pending >= 0);
 	while (ctx->pending < concurrency && ctx->started < ctx->target) {
 		if (CreateConnection(ctx) < 0) {
@@ -239,13 +239,7 @@ SendHTTPRequest(thread_context_t ctx, int sockid, struct wget_vars *wv)
 	wv->recv = 0;
 	wv->header_len = wv->file_len = 0;
 
-	snprintf(request, HTTP_HEADER_LEN, "GET %s HTTP/1.0\r\n"
-			"User-Agent: Wget/1.12 (linux-gnu)\r\n"
-			"Accept: */*\r\n"
-			"Host: \r\n"
-//			"Connection: Keep-Alive\r\n\r\n", 
-			"Connection: Close\r\n\r\n", 
-			 host);
+	snprintf(request, HTTP_HEADER_LEN, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 	len = strlen(request);
 
 	wr = mtcp_write(ctx->mctx, sockid, request, len);
@@ -335,6 +329,9 @@ HandleReadEvent(thread_context_t ctx, int sockid, struct wget_vars *wv)
 				"header_set: %d, header_len: %u, file_len: %lu\n", 
 				sockid, rd, wv->recv + rd, 
 				wv->headerset, wv->header_len, wv->file_len);
+		CloseConnection(ctx, sockid);
+		
+		SendHTTPRequest(ctx, sockid, wv);
 
 		pbuf = buf;
 		if (!wv->headerset) {
