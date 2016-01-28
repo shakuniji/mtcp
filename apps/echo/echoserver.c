@@ -130,9 +130,9 @@ HandleReadEvent(struct thread_context *ctx, int sockid, struct server_vars *sv)
 
 	time(&t_now);
 	
-	len = strlen(response);
+	len = strlen(buf);
 	//printf("Socket %d HTTP Response: \n%s", sockid, response);
-	sent = mtcp_write(ctx->mctx, sockid, response, len);
+	sent = mtcp_write(ctx->mctx, sockid, buf, len);
 
 	ev.events = MTCP_EPOLLIN | MTCP_EPOLLOUT;
 	ev.data.sockid = sockid;
