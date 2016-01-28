@@ -133,6 +133,7 @@ HandleReadEvent(struct thread_context *ctx, int sockid, struct server_vars *sv)
 	len = strlen(buf);
 	//printf("Socket %d HTTP Response: \n%s", sockid, response);
 	sent = mtcp_write(ctx->mctx, sockid, buf, len);
+	CloseConnection(ctx,sockid,sv);
 
 	ev.events = MTCP_EPOLLIN | MTCP_EPOLLOUT;
 	ev.data.sockid = sockid;
