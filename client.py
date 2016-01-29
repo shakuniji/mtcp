@@ -12,7 +12,7 @@ def sendserver(x):
 	BUFFER_SIZE = 1024
 	MESSAGE = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 	
-	dt = datetime.datetime(2016,1,29,14,55,30)                                                      
+	dt = datetime.datetime(2016,1,29,14,59,30)                                                      
 	while (datetime.datetime.now() < dt):continue
 	
 	endTime = datetime.datetime.now() + datetime.timedelta(minutes=1)
@@ -35,6 +35,6 @@ def sendserver(x):
 
 if __name__=='__main__':
 	p = Pool(50)
-	nump = 20
+	nump = 40
 	x = p.map(sendserver,[x for x in range(nump)])
 	print sum(x)/nump
