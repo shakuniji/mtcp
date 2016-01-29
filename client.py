@@ -12,7 +12,7 @@ def sendserver(x):
 	BUFFER_SIZE = 1024
 	MESSAGE = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 	
-	dt = datetime.datetime(2016,1,29,14,59,30)                                                      
+	dt = datetime.datetime(2016,1,29,15,07,30)                                                      
 	while (datetime.datetime.now() < dt):continue
 	
 	endTime = datetime.datetime.now() + datetime.timedelta(minutes=1)
