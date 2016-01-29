@@ -11,7 +11,10 @@ def sendserver(x):
 	TCP_PORT = 8000
 	BUFFER_SIZE = 1024
 	MESSAGE = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
+	
+	dt = datetime.datetime(2016,1,29,14,41,30)                                                      
+	while (datetime.datetime.now() < dt):continue
+	
 	endTime = datetime.datetime.now() + datetime.timedelta(minutes=1)
 	count=0
 	while(datetime.datetime.now() <= endTime):
