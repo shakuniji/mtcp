@@ -23,7 +23,8 @@ def sendserver(x):
 	TCP_PORT = 9000
 	BUFFER_SIZE = 1024
 	MESSAGE = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
+	
+	dt = datetime.datetime(2016,1,29,15,29,30)                                                      
 	endTime = datetime.datetime.now() + datetime.timedelta(minutes=1)
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	#s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
