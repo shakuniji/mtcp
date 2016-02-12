@@ -8,14 +8,14 @@ from multiprocessing import Pool
 
 def request(x):
 	count =0
-	end = datetime.datetime.now() + datetime.timedelta(seconds = 30)
+	end = datetime.datetime.now() + datetime.timedelta(seconds = 300)
 	while (datetime.datetime.now() < end ):
 		try:
 			sendserver(x)
 			count +=1
 		except:
 			pass
-	print count
+	return count
 
 
 def sendserver(x):
@@ -41,4 +41,5 @@ def sendserver(x):
 
 if __name__=='__main__':
 	p = Pool(50)
-	p.map(request,[x for x in range(40)])
+	x = p.map(request,[x for x in range(40)])
+	print sum(x)
