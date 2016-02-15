@@ -14,7 +14,8 @@ def request(x):
 			sendserver(x)
 			count +=1
 		except:
-			pass
+			e = sys.exc_info()[0]
+			print e
 	print count
 
 
