@@ -6,7 +6,7 @@
 #include <errno.h>
 
 #define MY_PORT		8000
-#define MAXBUF		1024
+#define MAXBUF		16384
 
 int main(int Count, char *Strings[])
 {   int sockfd;
